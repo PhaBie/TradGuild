@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEORIO FX — 30-Day Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8eaf0;
+  --text2: #8b92a8;
+  --text3: #4a5068;
+  --green: #22d98a;
+  --green-dim: rgba(34,217,138,0.12);
+  --blue: #4d9fff;
+  --blue-dim: rgba(77,159,255,0.12);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.12);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.12);
+  --red: #ff6b6b;
+  --red-dim: rgba(255,107,107,0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* NAV */
+.nav { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(15,17,23,0.9); backdrop-filter: blur(12px); z-index: 100; }
+.nav-logo { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--green); letter-spacing: .1em; }
+.nav-stats { display: flex; gap: 1.5rem; align-items: center; }
+.nav-stat { text-align: center; }
+.nav-stat-n { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 500; color: var(--green); }
+.nav-stat-l { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+/* PROG */
+.prog-wrap { height: 2px; background: rgba(255,255,255,0.05); }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); width: 0%; transition: width .4s; }
+
+/* HERO */
+.hero { padding: 3rem 2rem 2rem; max-width: 1200px; margin: 0 auto; }
+.hero-tag { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--green); letter-spacing: .12em; text-transform: uppercase; margin-bottom: .75rem; }
+.hero h1 { font-size: 42px; font-weight: 700; line-height: 1.1; margin-bottom: .5rem; background: linear-gradient(135deg, #fff 0%, #8b92a8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: 15px; color: var(--text2); }
+.hero-warning { margin-top: 1rem; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(245,166,35,0.2); padding: 5px 12px; border-radius: 20px; }
+
+/* MAIN */
+.main { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem 4rem; }
+
+/* WEEK SECTION */
+.week-section { margin-bottom: 2.5rem; }
+.week-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+.week-badge { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 20px; }
+.week-title { font-size: 14px; font-weight: 500; color: var(--text2); }
+.week-count { margin-left: auto; font-size: 12px; color: var(--text3); }
+
+/* GRID */
+.day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+
+/* DAY CARD */
+.day-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
+.day-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0; transition: opacity .2s; }
+.day-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.day-card:hover::before { opacity: 1; }
+.day-card.done { opacity: .5; }
+.day-card.done .day-title { text-decoration: line-through; }
+
+.day-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); margin-bottom: .5rem; }
+.day-title { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: .75rem; color: var(--text); }
+.day-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: .75rem; }
+.day-footer { display: flex; align-items: center; justify-content: space-between; }
+.day-check { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+.day-check:hover { border-color: var(--green); }
+.day-check.checked { background: var(--green); border-color: var(--green); color: #000; font-weight: 700; }
+.day-open-btn { font-size: 11px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 3px 6px; border-radius: 6px; transition: all .15s; }
+.day-open-btn:hover { background: rgba(255,255,255,.06); color: var(--text2); }
+
+/* COLORS PER WEEK */
+.w1 .day-card::before { background: linear-gradient(90deg, var(--green), transparent); }
+.w1 .day-card:hover { border-color: rgba(34,217,138,0.25); }
+.w2 .day-card::before { background: linear-gradient(90deg, var(--blue), transparent); }
+.w2 .day-card:hover { border-color: rgba(77,159,255,0.25); }
+.w3 .day-card::before { background: linear-gradient(90deg, var(--amber), transparent); }
+.w3 .day-card:hover { border-color: rgba(245,166,35,0.25); }
+.w4 .day-card::before { background: linear-gradient(90deg, var(--purple), transparent); }
+.w4 .day-card:hover { border-color: rgba(167,139,250,0.25); }
+
+/* MODAL */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
+.modal-backdrop.open { display: flex; }
+.modal { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 100%; max-width: 540px; max-height: 85vh; overflow-y: auto; padding: 1.75rem; position: relative; }
+.modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,.08); border: none; color: var(--text2); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { background: rgba(255,255,255,.15); }
+.modal-day { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); margin-bottom: .35rem; }
+.modal-title { font-size: 20px; font-weight: 700; margin-bottom: .5rem; }
+.modal-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 1.25rem; }
+.section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); margin-bottom: .6rem; }
+.task-list { margin-bottom: 1.25rem; }
+.task-item { display: flex; gap: 8px; font-size: 13px; color: var(--text2); padding: 5px 0; line-height: 1.6; border-bottom: 1px solid var(--border); }
+.task-item:last-child { border-bottom: none; }
+.task-arrow { color: var(--text3); flex-shrink: 0; }
+.vid-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.25rem; }
+.vid-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--blue); background: var(--blue-dim); padding: 7px 10px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(77,159,255,0.15); transition: all .15s; }
+.vid-item:hover { background: rgba(77,159,255,0.2); }
+.tip { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: .75rem 1rem; font-size: 12px; color: var(--text2); }
+.modal-done-btn { width: 100%; margin-top: 1rem; padding: .75rem; border-radius: 10px; border: none; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 600; transition: all .2s; }
+.modal-done-btn.not-done { background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,217,138,0.3); }
+.modal-done-btn.not-done:hover { background: var(--green); color: #000; }
+.modal-done-btn.is-done { background: rgba(255,255,255,.05); color: var(--text3); border: 1px solid var(--border); }
+
+/* DONE BANNER */
+.done-banner { display: none; text-align: center; padding: 1.25rem; background: var(--green-dim); border: 1px solid rgba(34,217,138,0.25); border-radius: 14px; margin-bottom: 1.5rem; font-size: 15px; color: var(--green); font-weight: 600; }
+
+@media(max-width:768px) {
+  .hero h1 { font-size: 28px; }
+  .nav-stats { gap: .75rem; }
+  .day-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero, .main { padding-left: 1rem; padding-right: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">📈 LEORIO FX</div>
+  <div class="nav-stats">
+    <div class="nav-stat"><div class="nav-stat-n" id="done-count">0</div><div class="nav-stat-l">เสร็จแล้ว</div></div>
+    <div class="nav-stat"><div class="nav-stat-n" id="pct">0%</div><div class="nav-stat-l">คืบหน้า</div></div>
+    <div class="nav-stat"><div class="nav-stat-n" style="color:var(--amber)">Demo</div><div class="nav-stat-l">เงินจริง = 0</div></div>
+  </div>
+</nav>
+<div class="prog-wrap"><div class="prog-fill" id="prog"></div></div>
+
+<div class="hero">
+  <div class="hero-tag">30-Day Learning Path</div>
+  <h1>LEORIO FX<br>Study Plan</h1>
+  <p class="hero-sub">Smart Money / ICT Concepts — ตามหลัก LEORIO FX</p>
+  <div class="hero-warning">⚠️ เทรดเงินจริงก็ต่อเมื่อ Demo win rate &gt;50% ต่อเนื่อง 1 เดือน</div>
+</div>
+
+<div class="main">
+<div class="done-banner" id="done-banner">🎉 ยอดเยี่ยมมาก! ครบ 30 วันแล้ว พร้อม Demo trading ได้เลยครับ</div>
+<div id="plan-root"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-day" id="m-day"></div>
+    <div class="modal-title" id="m-title"></div>
+    <div class="modal-badge" id="m-badge"></div>
+    <div class="section-label">สิ่งที่ต้องทำวันนี้</div>
+    <div class="task-list" id="m-tasks"></div>
+    <div class="section-label">📹 วิดีโอแนะนำ</div>
+    <div class="vid-list" id="m-vids"></div>
+    <div class="tip" id="m-tip"></div>
+    <button class="modal-done-btn not-done" id="m-done-btn" onclick="toggleDoneFromModal()">✓ ทำเสร็จแล้ว</button>
+  </div>
+</div>
+
+<script>
+const weeks = [
+  {
+    id: "w1", label: "Week 1", title: "รู้จัก 3 Zone หลัก",
+    color: "#22d98a", dimColor: "rgba(34,217,138,0.12)",
+    days: [
+      { day:1, title:"Demand Zone คืออะไร", type:"ทฤษฎี",
+        tasks:["อ่าน PDF หน้า 1 ทำความเข้าใจนิยาม Demand","เปิด TradingView หากราฟ XAU/USD TF H4 หา Demand zone 5 จุด","จด: แท่งเขียวยาวพุ่งออกจากโซน = Demand","ห้ามเทรด วันนี้แค่ดูและจดโน้ต"],
+        vids:["Demand Supply Zone Forex Thai","Demand Zone Forex Beginner 2024"],
+        tip:"💡 วันแรกอย่าพยายามเข้าใจทุกอย่าง แค่จำว่า Demand = โซนที่ราคาเด้งขึ้นแรงๆ"},
+      { day:2, title:"Supply Zone คืออะไร", type:"ทฤษฎี",
+        tasks:["อ่าน PDF หน้า 2 นิยาม Supply","หา Supply zone 5 จุดบน H4","เปรียบ Demand vs Supply ในกราฟเดียวกัน","จด Supply อยู่บน Demand อยู่ล่างเสมอ"],
+        vids:["Supply Demand Zone TradingView Thai","How to Draw Supply Demand Zones Forex"],
+        tip:"💡 ลองใช้ Rectangle tool บน TradingView วาด zone ไว้ดูครับ"},
+      { day:3, title:"Order Block Buy", type:"ทฤษฎี",
+        tasks:["อ่าน PDF หน้า 3 เรื่อง OB Buy","OB Buy = แท่งแดงโดดๆ ก่อนแท่งเขียวพุ่ง","หา OB Buy 5 จุดบน H1 หรือ H4","สังเกตว่า OB เล็กกว่าและแม่นกว่า Demand"],
+        vids:["Order Block ICT Forex Thai อธิบาย","ICT Order Block Explained 2024"],
+        tip:"💡 OB คือ 'ที่ซ่อนออเดอร์' ของรายใหญ่ครับ"},
+      { day:4, title:"Order Block Sell", type:"ทฤษฎี",
+        tasks:["อ่าน PDF หน้า 4 เรื่อง OB Sell","OB Sell = แท่งเขียวโดดๆ ก่อนแท่งแดงพุ่ง","หา OB Sell 5 จุด","ฝึกตาให้มองออกภายใน 10 วินาที"],
+        vids:["Bearish Order Block Forex Tutorial","ICT Sell OB 2024"],
+        tip:"💡 ทำ quiz กับตัวเอง: ชี้แท่ง แล้วถามว่า OB ไหม?"},
+      { day:5, title:"Fair Value Gap (FVG)", type:"ทฤษฎี",
+        tasks:["อ่าน PDF หน้า 5 เรื่อง FVG","FVG = ช่องว่างระหว่างไส้เทียน 3 แท่ง","หา FVG ขาขึ้น 3 จุด + ขาลง 3 จุด","จด: FVG คือจุด retest ไม่ใช่กลับตัวเสมอไป"],
+        vids:["Fair Value Gap FVG ICT Thai","FVG Trading Strategy 2024"],
+        tip:"💡 ส่วนมาก FVG จะถูก fill กลับมาก่อนไปต่อ"},
+      { day:6, title:"Hidden Base", type:"ทฤษฎี",
+        tasks:["อ่านส่วน Hidden Base ใน PDF","หา Hidden Base บน H4, H1 อย่างละ 3 จุด","ต้องคอนเฟิร์มด้วย Fibo ก่อนใช้","เหมาะทำกำไรสั้นๆ ส่วนมากแค่เด้ง"],
+        vids:["Hidden Base Forex Price Action","Hidden Support Resistance Forex"],
+        tip:"💡 LEORIO ใช้ Hidden Base บน TF H4, H1 เท่านั้น"},
+      { day:7, title:"รีวิวสัปดาห์ 1 🔄", type:"รีวิว",
+        tasks:["วาด Mind Map: D&S / OB / FVG / Hidden Base","หากราฟ 1 ตัวที่มีครบทุก concept","ตอบตัวเอง: แต่ละ zone บอกอะไร?","ถ้ายังงง กลับไปอ่านซ้ำก่อนสัปดาห์ 2"],
+        vids:[],
+        tip:"💡 Review สำคัญมาก ทำให้จำได้นานกว่า 3 เท่า อย่าข้าม"},
+    ]
+  },
+  {
+    id: "w2", label: "Week 2", title: "โครงสร้างตลาดและเครื่องมือ",
+    color: "#4d9fff", dimColor: "rgba(77,159,255,0.12)",
+    days: [
+      { day:8, title:"Market Structure + BOS", type:"โครงสร้าง",
+        tasks:["อ่าน PDF หน้า 6-8 เรื่อง Market Structure","BOS = ราคาทะลุผ่าน High/Low ก่อนหน้า","ฝึกวาด HH/HL (ขาขึ้น) และ LH/LL (ขาลง)","หา BOS 5 จุดบน H1"],
+        vids:["Market Structure BOS CHOCH Forex Thai","ICT Market Structure Break 2024 Explained"],
+        tip:""},
+      { day:9, title:"CHOCH / MSS", type:"โครงสร้าง",
+        tasks:["CHOCH = สัญญาณแรกที่โครงสร้างจะเปลี่ยน","CHOCH เกิดก่อน BOS เสมอ — จำให้ขึ้นใจ","หา CHOCH 3 จุดบนกราฟ","อย่าสับสน: CHOCH ≠ trend เปลี่ยนแล้ว ต้องรอ BOS"],
+        vids:["CHOCH Change of Character ICT Smart Money"],
+        tip:"💡 CHOCH = เตือนว่าอาจเปลี่ยน, BOS = ยืนยันแล้วว่าเปลี่ยน"},
+      { day:10, title:"Downtrend → Uptrend", type:"โครงสร้าง",
+        tasks:["อ่าน PDF หน้า 7 Flow: Supply→BOS→CHOCH→Demand","ฝึกหา Demand หลัง CHOCH เกิดขึ้น","ระวัง: ไม่ใช่ทุก bounce คือ trend change","ฝึกบน EUR/USD หรือ XAU/USD TF H4"],
+        vids:["Trend Reversal Smart Money Downtrend Uptrend"],
+        tip:""},
+      { day:11, title:"Uptrend → Downtrend", type:"โครงสร้าง",
+        tasks:["อ่าน PDF หน้า 8 Flow: Demand→BOS→CHOCH→Supply","ฝึกหา Supply หลัง CHOCH ฝั่ง Sell","เปรียบกับวันที่ 10 ให้เห็น mirror pattern","ฝึกบน XAU/USD TF H1"],
+        vids:["Uptrend to Downtrend Reversal SMC 2024"],
+        tip:""},
+      { day:12, title:"Fibonacci Retracement", type:"เครื่องมือ",
+        tasks:["อ่าน PDF หน้า 13-14 การใช้ Fibo","Buy: ตีจาก Low→High (100%=Low, 0%=High)","Sell: ตีจาก High→Low (100%=High, 0%=Low)","จุดย่อหลัก: 50% และ 61.8%"],
+        vids:["Fibonacci Retracement Forex Thai วิธีใช้","Fibonacci 50 61.8 Trading Strategy"],
+        tip:"💡 61.8% = Golden Ratio จุดย่อที่แม่นที่สุดครับ"},
+      { day:13, title:"Premium & Discount Zone", type:"เครื่องมือ",
+        tasks:["อ่าน PDF หน้า 23","เส้น Fibo 50% แบ่งโซน","Buy ใน Discount (<50%), Sell ใน Premium (>50%)","ฝึกบนกราฟ 5 ตัว: ตอนนี้ราคาอยู่โซนไหน?"],
+        vids:["ICT Premium Discount Zone Smart Money Concept"],
+        tip:"💡 ซื้อของถูก (Discount) ขายของแพง (Premium)"},
+      { day:14, title:"รีวิวสัปดาห์ 2 🔄", type:"รีวิว",
+        tasks:["วิเคราะห์กราฟ 1 ตัวครบ: BOS+CHOCH+Zone+Fibo","อธิบาย flow โดยไม่ดู PDF","จด mistake ที่เจอในสัปดาห์นี้","ตอบ: XAU/USD อยู่ phase ไหนตอนนี้?"],
+        vids:[],
+        tip:"💡 ถ้าอธิบาย flow ไม่ได้โดยไม่ดู PDF ยังต้องทบทวนครับ"},
+    ]
+  },
+  {
+    id: "w3", label: "Week 3", title: "เข้าออเดอร์และ Setup จริง",
+    color: "#f5a623", dimColor: "rgba(245,166,35,0.12)",
+    days: [
+      { day:15, title:"PA กลับตัว + เคลียร์ไส้", type:"เข้าออเดอร์",
+        tasks:["อ่าน PDF หน้า 10-12","Buy pattern: เขียว→แดง→เขียว","Sell pattern: แดง→เขียว→แดง","เคลียร์ไส้ = ราคาวิ่งเคลียร์ไส้ก่อนกลับ TF M5/M15"],
+        vids:["Price Action Reversal Candlestick Thai Forex","Wick Sweep Trading Strategy Forex 2024"],
+        tip:""},
+      { day:16, title:"เข้า BUY 3 ไม้ (Demo)", type:"เข้าออเดอร์",
+        tasks:["เปิด Demo (แนะนำ Exness / XM / IC Markets)","ไม้ 1: รอแท่งแดงเคลียร์ไส้แล้วเข้า","ไม้ 2-3: รอ pattern ซ้ำ ไม่รีบ","บันทึก journal ทุก trade"],
+        vids:["Demo Trading Forex Beginner Thai","3 Entry Technique Forex Scalping"],
+        tip:"💡 ยังไม่มี demo? เปิด Exness demo ฟรีได้เลยครับ"},
+      { day:17, title:"เข้า SELL 3 ไม้ (Demo)", type:"เข้าออเดอร์",
+        tasks:["รอแท่งเขียวเคลียร์ไส้แล้วเข้า Sell","SL: บน PA (เหนือ High ของแท่ง)","บันทึก journal ทุก trade","วัดผล: กี่ไม้ได้เข้า กี่ไม้ miss"],
+        vids:["Sell Entry Setup Forex Price Action 2024"],
+        tip:""},
+      { day:18, title:"PA กลับตัวหลอก", type:"เข้าออเดอร์",
+        tasks:["อ่าน PDF หน้า 16-18 PA หลอก","หลอกมักเกิดนอกโซน (ด้านซ้ายไม่มี zone)","เจอ False PA → คาดว่าไปต่อตามเทรนเดิม","หา False PA 5 จุดบนกราฟ"],
+        vids:["False Reversal Signal Forex How to Avoid"],
+        tip:"💡 LEORIO เตือน: False PA ชอบเกิดนอกโซนสำคัญ"},
+      { day:19, title:"Setup BUY: BOS+MSS+FVG", type:"เข้าออเดอร์",
+        tasks:["อ่าน PDF หน้า 14","ต้องครบ 3 อย่าง: BOS + MSS + FVG","SL: ใต้ FVG หรือใต้ Low, TP: R:R ≥ 1:2","Demo trade พร้อมเขียน entry reason ทุก trade"],
+        vids:["BOS MSS FVG Buy Setup ICT Smart Money 2024"],
+        tip:"💡 ถ้าไม่ครบ 3 อย่าง → ไม่เข้า ดีกว่าฝืน"},
+      { day:20, title:"Setup SELL: BOS+MSS+FVG", type:"เข้าออเดอร์",
+        tasks:["อ่าน PDF หน้า 15","ต้องครบ: BOS + MSS + FVG ฝั่ง Sell","SL: บน FVG หรือ High, TP: ตาม R:R","Demo อย่างน้อย 3 trade"],
+        vids:["Sell Setup SMC ICT Market Structure Shift FVG"],
+        tip:""},
+      { day:21, title:"รีวิวสัปดาห์ 3 🔄", type:"รีวิว",
+        tasks:["รีวิว demo trade ทั้งหมดสัปดาห์นี้","นับ: กี่เทรดตรง rule กี่เทรดดวง","ตรวจ: SL ถูกไหม เข้าตรงโซนไหม","โฟกัสที่ process ไม่ใช่ผลกำไร"],
+        vids:[],
+        tip:"💡 ถ้า process ถูก กำไรจะตามมาเองครับ"},
+    ]
+  },
+  {
+    id: "w4", label: "Week 4", title: "ระบบครบ + Backtest + Demo",
+    color: "#a78bfa", dimColor: "rgba(167,139,250,0.12)",
+    days: [
+      { day:22, title:"Multi-Timeframe Analysis", type:"ระบบ",
+        tasks:["อ่าน PDF หน้า 19-20","H4/H1 = โครงสร้าง, M15/M5 = จุดเข้า","H4 หา zone → H1 คอนเฟิร์ม → M15 เข้า","กฎเหล็ก: ห้ามเข้า M5 โดยไม่ดู H1 ก่อน"],
+        vids:["Multi Timeframe Top Down Analysis Thai","Top Down H4 H1 M15 ICT Forex"],
+        tip:""},
+      { day:23, title:"IDM — Inducement", type:"ระบบ",
+        tasks:["อ่าน PDF หน้า 22-24","IDM = รายใหญ่เคลียร์รายย่อยก่อนไปต่อ","Demand ใน Discount zone = อาจเป็น IDM","รอเคลียร์ IDM ก่อน แล้วหาโซนใหม่ใน Premium"],
+        vids:["Inducement IDM ICT Smart Money Liquidity"],
+        tip:"💡 IDM คือ 'กับดัก' ที่รายใหญ่วางไว้ครับ"},
+      { day:24, title:"Trendline + Triangle", type:"ระบบ",
+        tasks:["อ่าน PDF หน้า 21","Break trendline (แท่งปิดเหนือเส้น) → รอ retest","ฝึก draw trendline 5 กราฟบน M15","Trendline ยืนยัน bias เท่านั้น ไม่ใช่ entry เดี่ยว"],
+        vids:["Trendline Breakout Retest Forex M15 Strategy"],
+        tip:""},
+      { day:25, title:"Backtest รอบที่ 1", type:"ทดสอบ",
+        tasks:["เลือก 1 คู่: XAU/USD หรือ EUR/USD","ย้อนกราฟ 2 สัปดาห์ที่แล้ว","หา setup ที่ผ่าน rule ทั้งหมด 5 จุด","บันทึก journal: entry/SL/TP/result"],
+        vids:["How to Backtest Forex TradingView","Trading Journal Forex Thai วิธีจด"],
+        tip:"💡 Backtest ช่วยให้เห็นว่า rule ของเราได้ผลจริงไหม"},
+      { day:26, title:"Backtest รอบที่ 2", type:"ทดสอบ",
+        tasks:["ย้อนกราฟไปอีก 2 สัปดาห์ก่อนหน้า","เป้าหมาย: หา 10 setup ที่ผ่าน rule","นับ win rate จาก 10 trade นั้น","ไม่มีถูกผิด — นี่คือการเรียนรู้ตัวเอง"],
+        vids:[],
+        tip:"💡 ถ้า win rate ต่ำกว่า 40% ต้องทบทวน rule ให้ชัดขึ้น"},
+      { day:27, title:"Demo Trade วัน 1", type:"ฝึกจริง",
+        tasks:["เทรด Demo ตาม rule เท่านั้น ห้าม FOMO","บันทึก: เวลา/เหตุผล/ความรู้สึก","ไม่มี setup ที่ครบ rule → ไม่เทรดวันนั้น","เป้าหมาย: process ถูก ไม่ใช่กำไร"],
+        vids:["Trading Psychology Patience Discipline Forex Thai"],
+        tip:""},
+      { day:28, title:"Demo Trade วัน 2", type:"ฝึกจริง",
+        tasks:["ดู mistake จากวันแรกก่อนเริ่ม","Setup ไม่ครบ rule → skip ทันที","ฝึก patience: รอ setup ดีกว่าเข้าพร่ำเพรื่อ","บันทึก journal รวมถึง trade ที่ skip ด้วย"],
+        vids:[],
+        tip:""},
+      { day:29, title:"Demo + Weekly Review", type:"ฝึกจริง",
+        tasks:["เทรด demo ตามปกติ","รีวิว journal 7 วันที่ผ่านมา","หา pattern mistake ของตัวเอง","จด 3 สิ่งที่ต้องแก้ใน 30 วันถัดไป"],
+        vids:[],
+        tip:""},
+      { day:30, title:"สรุป 30 วัน 🎯", type:"รีวิว",
+        tasks:["รีวิวครบ 30 วัน: เข้าใจ concept ครบไหม?","จด: ยังงงตรงไหน? ต้องกลับไปทบทวนอะไร?","วางแผน: Backtest เพิ่ม หรือ Demo ต่อ?","⚠️ เงินจริงก็ต่อเมื่อ Demo win rate >50% ต่อเนื่อง 1 เดือน"],
+        vids:[],
+        tip:"🏆 ถึงจะครบ 30 วัน การเรียนรู้ยังไม่จบ ทุก trade คือบทเรียนครับ"},
+    ]
+  }
+];
+
+const typeColors = {
+  "ทฤษฎี":   {bg:"rgba(34,217,138,0.12)", fg:"#22d98a"},
+  "รีวิว":   {bg:"rgba(167,139,250,0.12)",fg:"#a78bfa"},
+  "โครงสร้าง":{bg:"rgba(77,159,255,0.12)", fg:"#4d9fff"},
+  "เครื่องมือ":{bg:"rgba(245,166,35,0.12)",fg:"#f5a623"},
+  "เข้าออเดอร์":{bg:"rgba(245,166,35,0.12)",fg:"#e07b00"},
+  "ระบบ":    {bg:"rgba(45,212,191,0.12)", fg:"#2dd4bf"},
+  "ทดสอบ":   {bg:"rgba(255,107,107,0.12)",fg:"#ff6b6b"},
+  "ฝึกจริง": {bg:"rgba(167,139,250,0.12)",fg:"#a78bfa"},
+};
+
+let done = new Set();
+let activeDay = null;
+
+function renderPlan() {
+  const root = document.getElementById('plan-root');
+  let html = '';
+  weeks.forEach(week => {
+    html += `<div class="week-section ${week.id}">
+      <div class="week-header">
+        <span class="week-badge" style="background:${week.dimColor};color:${week.color}">${week.label}</span>
+        <span class="week-title">${week.title}</span>
+        <span class="week-count">${week.days.length} วัน</span>
+      </div>
+      <div class="day-grid">`;
+    week.days.forEach(d => {
+      const tc = typeColors[d.type] || {bg:"rgba(255,255,255,0.08)",fg:"#8b92a8"};
+      const isDone = done.has(d.day);
+      html += `<div class="day-card${isDone?' done':''}" id="card-${d.day}" style="border-top:2px solid ${isDone?week.color:'transparent'}">
+        <div class="day-num">Day ${d.day}</div>
+        <div class="day-title">${d.title}</div>
+        <div class="day-badge" style="background:${tc.bg};color:${tc.fg}">${d.type}</div>
+        <div class="day-footer">
+          <button class="day-open-btn" onclick="openModal(${d.day})">รายละเอียด →</button>
+          <div class="day-check${isDone?' checked':''}" id="ck-${d.day}" onclick="toggleDone(${d.day})">${isDone?'✓':''}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  root.innerHTML = html;
+}
+
+function toggleDone(dayNum) {
+  if (done.has(dayNum)) { done.delete(dayNum); }
+  else { done.add(dayNum); }
+  updateStats();
+  renderPlan();
+  if (activeDay === dayNum) updateModalDoneBtn();
+}
+
+function toggleDoneFromModal() { toggleDone(activeDay); updateModalDoneBtn(); }
+
+function updateModalDoneBtn() {
+  const btn = document.getElementById('m-done-btn');
+  if (done.has(activeDay)) {
+    btn.textContent = '✓ เสร็จแล้ว';
+    btn.className = 'modal-done-btn is-done';
+  } else {
+    btn.textContent = '✓ ทำเสร็จแล้ว';
+    btn.className = 'modal-done-btn not-done';
+  }
+}
+
+function updateStats() {
+  const n = done.size;
+  document.getElementById('done-count').textContent = n;
+  document.getElementById('pct').textContent = Math.round(n/30*100)+'%';
+  document.getElementById('prog').style.width = Math.round(n/30*100)+'%';
+  if (n === 30) document.getElementById('done-banner').style.display = 'block';
+}
+
+function findDay(dayNum) {
+  for (const w of weeks) for (const d of w.days) if (d.day === dayNum) return {day:d,week:w};
+  return null;
+}
+
+function openModal(dayNum) {
+  activeDay = dayNum;
+  const found = findDay(dayNum);
+  if (!found) return;
+  const {day: d, week: w} = found;
+  const tc = typeColors[d.type] || {bg:"rgba(255,255,255,0.08)",fg:"#8b92a8"};
+  document.getElementById('m-day').textContent = `Day ${d.day} · ${w.label}`;
+  document.getElementById('m-title').textContent = d.title;
+  const badge = document.getElementById('m-badge');
+  badge.textContent = d.type;
+  badge.style.background = tc.bg;
+  badge.style.color = tc.fg;
+  document.getElementById('m-tasks').innerHTML = d.tasks.map(t =>
+    `<div class="task-item"><span class="task-arrow">→</span><span>${t}</span></div>`).join('');
+  const vidEl = document.getElementById('m-vids');
+  if (d.vids.length) {
+    vidEl.innerHTML = d.vids.map(v =>
+      `<a class="vid-item" href="https://www.youtube.com/results?search_query=${encodeURIComponent(v)}" target="_blank">▶ ค้นหา: "${v}"</a>`).join('');
+    vidEl.style.display = '';
+    vidEl.previousElementSibling.style.display = '';
+  } else {
+    vidEl.innerHTML = '';
+    vidEl.style.display = 'none';
+    vidEl.previousElementSibling.style.display = 'none';
+  }
+  const tipEl = document.getElementById('m-tip');
+  tipEl.textContent = d.tip || '';
+  tipEl.style.display = d.tip ? '' : 'none';
+  updateModalDoneBtn();
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target.id === 'modal') closeModalBtn();
+}
+function closeModalBtn() {
+  document.getElementById('modal').classList.remove('open');
+  activeDay = null;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+renderPlan();
+</script>
+</body>
+</html>
